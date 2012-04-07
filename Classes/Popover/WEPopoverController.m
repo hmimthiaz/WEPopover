@@ -93,7 +93,7 @@
 		
 		BOOL userInitiatedDismissal = [(NSNumber *)theContext boolValue];
 		
-		if (userInitiatedDismissal) {
+		if (userInitiatedDismissal && [delegate respondsToSelector: @selector(popoverControllerDidDismissPopover:)]) {
 			//Only send message to delegate in case the user initiated this event, which is if he touched outside the view
 			[delegate popoverControllerDidDismissPopover:self];
 		}
@@ -203,7 +203,7 @@
 
 - (void)viewWasTouched:(WETouchableView *)view {
 	if (popoverVisible) {
-		if (!delegate || [delegate popoverControllerShouldDismissPopover:self]) {
+		if (!delegate || ![delegate respondsToSelector: @selector(popoverControllerShouldDismissPopover:)] || [delegate popoverControllerShouldDismissPopover:self]) {
 			[self dismissPopoverAnimated:YES userInitiated:YES];
 		}
 	}
